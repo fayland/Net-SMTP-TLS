@@ -1,0 +1,6 @@
+Revision history for Net-SMTP-TLS
+
+0.10    Dec 28th, 2005
+        First version, released on an unsuspecting world.
+	Lots of stuff that could be done for future versions, such as better
+	tests, and better documentation.

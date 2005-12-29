@@ -1,0 +1,16 @@
+# http://module-build.sourceforge.net/META-spec.html
+#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
+name:         Net-SMTP-TLS
+version:      0.10
+version_from: lib/Net/SMTP/TLS.pm
+installdirs:  site
+requires:
+    Digest::HMAC_MD5:              0
+    IO::Socket::INET:              0
+    IO::Socket::SSL:               0
+    MIME::Base64:                  0
+    Net::SSLeay:                   0
+    Test::More:                    0
+
+distribution_type: module
+generated_by: ExtUtils::MakeMaker version 6.17
