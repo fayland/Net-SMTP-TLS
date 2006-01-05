@@ -4,7 +4,7 @@ Net::SMTP::TLS - An SMTP client supporting TLS and AUTH
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =head1 SYNOPSIS
 
@@ -39,6 +39,8 @@ The I<to> method also does not take options, and is the only method available to
 The constructor takes a limited number of L<Net::SMTP>'s parameters. The constructor for B<Net::SMTP::TLS> takes the following (in addition to the hostname of the mail server, which must be the first parameter and is not explicitly named):
 
 =over
+
+NoTLS - In the unlikely event that you need to use this class to perform non-TLS SMTP (you ought to be using Net::SMTP itself for that...), this will turn off TLS when supplied with a true value. This will most often cause an error related to authentication when used on a server that requires TLS
 
 Hello - hostname used in the EHLO command
 
@@ -79,7 +81,7 @@ package Net::SMTP::TLS;
 use strict;
 use warnings;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 use Carp;
 
 use Net::SSLeay;
@@ -116,7 +118,7 @@ sub new {
 		croak "Could not connect to SMTP server: $host $txt\n";
 	}
 	$me->hello(); # the first hello, 2nd after starttls
-	$me->starttls(); # why we're here, after all
+	$me->starttls() if not $args{NoTLS}; # why we're here, after all
 	$me->login() if($me->{User} and $me->{Password});
 	return $me;
 }
@@ -186,6 +188,9 @@ sub starttls {
 sub login {
 	my $me	= shift;
 	my $type= $me->{features}->{AUTH};
+	if(not $type){
+		croak "Server did not return AUTH in capabilities\n";
+	}
 	if($type =~ /CRAM\-MD5/){
 		$me->auth_MD5();
 	}elsif($type =~ /LOGIN/){
