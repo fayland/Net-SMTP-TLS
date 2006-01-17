@@ -4,7 +4,7 @@ Net::SMTP::TLS - An SMTP client supporting TLS and AUTH
 
 =head1 VERSION
 
-Version 0.11
+Version 0.12
 
 =head1 SYNOPSIS
 
@@ -74,6 +74,8 @@ This code was blatantly plagiarized from Michal Ludvig's smtp-client.pl script. 
 
 Alexander Christian Westholm, awestholm at verizon dawt net
 
+Improvements courtesy of Tomek Zielinski
+
 =cut
 
 package Net::SMTP::TLS;
@@ -81,7 +83,7 @@ package Net::SMTP::TLS;
 use strict;
 use warnings;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 use Carp;
 
 use Net::SSLeay;
@@ -127,7 +129,7 @@ sub new {
 sub _command {
 	my $me	= shift;
 	my $command = shift;
-	$me->{sock}->printf($command."\n");
+	$me->{sock}->printf($command."\015\012");
 }
 
 # read a line from the server and parse the
@@ -257,11 +259,21 @@ sub auth_PLAIN{
 	}
 }
 
+sub _addr {
+	my $addr = shift;
+	$addr = "" unless defined $addr;
+
+	return $1 if $addr =~ /(<[^>]*>)/;
+	$addr =~ s/^\s+|\s+$//sg;
+
+	"<$addr>";
+}
+
 # send the MAIL FROM: <addr> command
 sub mail {
 	my $me	= shift;
 	my $from= shift;
-	$me->_command("MAIL FROM: <$from>");
+	$me->_command("MAIL FROM: "._addr($from));
 	my ($num,$txt) = $me->_response();
 	if(not $num == 250){
 		croak "Could't set FROM: $num $txt\n";
@@ -269,15 +281,28 @@ sub mail {
 }
 
 # send the RCPT TO: <addr> command
-sub to {
-	my $me	= shift;
-	my $to	= shift;
-	$me->_command("RCPT TO: <$to>");
-	my ($num,$txt) = $me->_response();
-	if(not $num == 250){
-		croak "Couldn't send TO: $num $txt\n";
+sub recipient
+{
+	my $me = shift;
+
+
+	my $addr;
+	foreach $addr (@_) 
+	{
+		$me->_command("RCPT TO: "._addr($addr));
+		my ($num,$txt) = $me->_response();
+		if(not $num == 250){
+			croak "Couldn't send TO <$addr>: $num $txt\n";
+		}
 	}
 }
+
+BEGIN {
+	*to  = \&recipient;
+	*cc  = \&recipient;
+	*bcc = \&recipient;
+}
+
 
 # start the body of the message
 # I would probably have designed the public methods of
@@ -293,13 +318,70 @@ sub data {
 }
 
 # send stuff over raw (for use as message body)
-sub datasend { my $me = shift; $me->_command(shift) }
+sub datasend {
+	my $cmd = shift;
+	my $arr = @_ == 1 && ref($_[0]) ? $_[0] : \@_;
+	my $line = join("" ,@$arr);
+
+	return 0 unless defined(fileno($cmd->{sock}));
+
+	my $last_ch = $cmd->{last_ch};
+	$last_ch = $cmd->{last_ch} = "\012" unless defined $last_ch;
+
+	return 1 unless length $line;
+
+	$line =~ tr/\r\n/\015\012/ unless "\r" eq "\015";
+
+	my $first_ch = '';
+
+	if ($last_ch eq "\015") {
+		$first_ch = "\012" if $line =~ s/^\012//;
+	}
+	elsif ($last_ch eq "\012") {
+		$first_ch = "." if $line =~ /^\./;
+	}
+
+	$line =~ s/\015?\012(\.?)/\015\012$1$1/sg;
+
+	substr($line,0,0) = $first_ch;
+
+	$cmd->{last_ch} = substr($line,-1,1);
+
+	my $len = length($line);
+	my $offset = 0;
+	my $win = "";
+	vec($win,fileno($cmd->{sock}),1) = 1;
+	my $timeout = $cmd->{sock}->timeout || undef;
+
+	local $SIG{PIPE} = 'IGNORE' unless $^O eq 'MacOS';
+
+	while($len)
+	{
+		my $wout;
+		if (select(undef,$wout=$win, undef, $timeout) > 0 or -f $cmd->{sock}) # -f for testing on win32
+		{
+			my $w = syswrite($cmd->{sock}, $line, $len, $offset);
+			unless (defined($w))
+			{
+				carp("Error: $!");
+				return undef;
+			}
+			$len -= $w;
+		}
+		else
+		{
+			carp("Error: Timeout");
+			return undef;
+		}
+	}
+
+}
 
 # end the message body submission by a line with nothing
 # but a period on it.
 sub dataend {
 	my $me = shift;
-	$me->_command("\n.");
+	$me->_command("\015\012.");
 	my ($num,$txt) = $me->_response();
 	if(not $num == 250){
 		croak "Couldn't send mail: $num $txt\n";
