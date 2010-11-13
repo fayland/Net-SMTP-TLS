@@ -26,10 +26,10 @@ use Net::SMTP::TLS::ButMaintained;
 
 my $mailer = Net::SMTP::TLS::ButMaintained->new(
  	$config{host},
-	Hello	=>	'fayland.org',
- 	Port	=>	$config{port},
- 	User	=>	$config{user},
- 	Password=>	$config{pass}
+ 	Port	 =>	$config{port},
+ 	User	 =>	$config{user},
+ 	Password =>	$config{pass},
+ 	Debug    => 1,
 );
 $mailer->mail($config{user});
 $mailer->to($config{to});
@@ -37,5 +37,7 @@ $mailer->data;
 $mailer->datasend("Sent thru TLS!");
 $mailer->dataend;
 $mailer->quit;
+
+ok($mailer);
 
 1;
