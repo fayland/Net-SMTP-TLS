@@ -1,10 +1,6 @@
-=head1 NAME
+package Net::SMTP::TLS::ButMaintained;
 
-Net::SMTP::TLS::ButMaintained - An SMTP client supporting TLS and AUTH
-
-=head1 VERSION
-
-Version 0.13_01
+# ABSTRACT: An SMTP client supporting TLS and AUTH
 
 =head1 SYNOPSIS
 
@@ -58,29 +54,23 @@ Password - password for SMTP AUTH
 
 =back
 
-=head1 TLS and AUTHentication
+=head2 TLS and AUTHentication
 
 During construction of an B<Net::SMTP::TLS::ButMaintained> instance, the full login process will occur. This involves first sending EHLO to the server, then initiating a TLS session through STARTTLS. Once this is complete, the module will attempt to login using the credentials supplied by the constructor, if such credentials have been supplied.
 
 The AUTH method will depend on the features returned by the server after the EHLO command. Based on that, CRAM-MD5 will be used if available, followed by LOGIN, followed by PLAIN. Please note that LOGIN is the only method of authentication that has been tested. CRAM-MD5 and PLAIN login functionality was taken directly from the script mentioned in the acknowledgements section, however, I have not tested them personally.
 
-=head1 ERROR HANDLING
+=head2 ERROR HANDLING
 
 This module will croak in the event of an SMTP error. Should you wish to handle this gracefully in your application, you may wrap your mail transmission in an eval {} block and check $@ afterward.
 
-=head1 ACKNOWLEDGEMENTS
+=head2 ACKNOWLEDGEMENTS
 
 This code was blatantly plagiarized from Michal Ludvig's smtp-client.pl script. See L<http://www.logix.cz/michal/devel/smtp> for his excellent work.
-
-=head1 AUTHOR
-
-Alexander Christian Westholm, awestholm at verizon dawt net
 
 Improvements courtesy of Tomek Zielinski
 
 =cut
-
-package Net::SMTP::TLS::ButMaintained;
 
 use strict;
 use warnings;
@@ -283,10 +273,8 @@ sub mail {
 }
 
 # send the RCPT TO: <addr> command
-sub recipient
-{
+sub recipient {
 	my $me = shift;
-
 
 	my $addr;
 	foreach $addr (@_) 
@@ -304,7 +292,6 @@ BEGIN {
 	*cc  = \&recipient;
 	*bcc = \&recipient;
 }
-
 
 # start the body of the message
 # I would probably have designed the public methods of
