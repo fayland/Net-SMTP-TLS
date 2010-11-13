@@ -5,8 +5,8 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME                => 'Net::SMTP::TLS::ButMaintained',
     AUTHOR              => 'Alexander Christian Westholm <awestholm@verizon.net>',
-    VERSION_FROM        => 'lib/Net/SMTP/TLS.pm',
-    ABSTRACT_FROM       => 'lib/Net/SMTP/TLS.pm',
+    VERSION_FROM        => 'lib/Net/SMTP/TLS/ButMaintained.pm',
+    ABSTRACT_FROM       => 'lib/Net/SMTP/TLS/ButMaintained.pm',
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More' => 0,
@@ -17,5 +17,5 @@ WriteMakefile(
     	'Digest::HMAC_MD5'=>0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Net-SMTP-TLS-*' },
+    clean               => { FILES => 'Net-SMTP-TLS-ButMaintained-*' },
 );
