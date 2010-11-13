@@ -1,15 +1,15 @@
 =head1 NAME
 
-Net::SMTP::TLS - An SMTP client supporting TLS and AUTH
+Net::SMTP::TLS::ButMaintained - An SMTP client supporting TLS and AUTH
 
 =head1 VERSION
 
-Version 0.12
+Version 0.13_01
 
 =head1 SYNOPSIS
 
- use Net::SMTP::TLS;
- my $mailer = new Net::SMTP::TLS(
+ use Net::SMTP::TLS::ButMaintained;
+ my $mailer = Net::SMTP::TLS::ButMaintained->new(
  	'your.mail.host',
 	Hello	=>	'some.host.name',
  	Port	=>	25, #redundant
@@ -24,9 +24,11 @@ Version 0.12
 
 =head1 DESCRIPTION
 
-B<Net::SMTP::TLS> is a TLS and AUTH capable SMTP client which offers an interface that users will find familiar from L<Net::SMTP>. B<Net::SMTP::TLS> implements a subset of the methods provided by that module, but certainly not (yet) a complete mirror image of that API.
+B<Net::SMTP::TLS::ButMaintained> is forked from L<Net::SMTP::TLS>. blame C<Evan Carroll> for the idea. :)
 
-The methods supported by B<Net::SMTP::TLS> are used in the above example. Though self explanatory for the most part, please see the perldoc for L<Net::SMTP> if you are unclear.
+B<Net::SMTP::TLS::ButMaintained> is a TLS and AUTH capable SMTP client which offers an interface that users will find familiar from L<Net::SMTP>. B<Net::SMTP::TLS::ButMaintained> implements a subset of the methods provided by that module, but certainly not (yet) a complete mirror image of that API.
+
+The methods supported by B<Net::SMTP::TLS::ButMaintained> are used in the above example. Though self explanatory for the most part, please see the perldoc for L<Net::SMTP> if you are unclear.
 
 The differences in the methods provided are as follows:
 
@@ -36,7 +38,7 @@ The I<mail> method does not take the options list taken by L<Net::SMTP>
 
 The I<to> method also does not take options, and is the only method available to set the recipient (unlike the many synonyms provided by L<Net::SMTP>).
 
-The constructor takes a limited number of L<Net::SMTP>'s parameters. The constructor for B<Net::SMTP::TLS> takes the following (in addition to the hostname of the mail server, which must be the first parameter and is not explicitly named):
+The constructor takes a limited number of L<Net::SMTP>'s parameters. The constructor for B<Net::SMTP::TLS::ButMaintained> takes the following (in addition to the hostname of the mail server, which must be the first parameter and is not explicitly named):
 
 =over
 
@@ -58,7 +60,7 @@ Password - password for SMTP AUTH
 
 =head1 TLS and AUTHentication
 
-During construction of an B<Net::SMTP::TLS> instance, the full login process will occur. This involves first sending EHLO to the server, then initiating a TLS session through STARTTLS. Once this is complete, the module will attempt to login using the credentials supplied by the constructor, if such credentials have been supplied.
+During construction of an B<Net::SMTP::TLS::ButMaintained> instance, the full login process will occur. This involves first sending EHLO to the server, then initiating a TLS session through STARTTLS. Once this is complete, the module will attempt to login using the credentials supplied by the constructor, if such credentials have been supplied.
 
 The AUTH method will depend on the features returned by the server after the EHLO command. Based on that, CRAM-MD5 will be used if available, followed by LOGIN, followed by PLAIN. Please note that LOGIN is the only method of authentication that has been tested. CRAM-MD5 and PLAIN login functionality was taken directly from the script mentioned in the acknowledgements section, however, I have not tested them personally.
 
@@ -78,12 +80,12 @@ Improvements courtesy of Tomek Zielinski
 
 =cut
 
-package Net::SMTP::TLS;
+package Net::SMTP::TLS::ButMaintained;
 
 use strict;
 use warnings;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13_01';
 use Carp;
 
 use Net::SSLeay;
@@ -367,6 +369,7 @@ sub datasend {
 				return undef;
 			}
 			$len -= $w;
+			$offset += $w;
 		}
 		else
 		{
