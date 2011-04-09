@@ -75,7 +75,6 @@ Improvements courtesy of Tomek Zielinski
 use strict;
 use warnings;
 
-our $VERSION = '0.13_01';
 use Carp;
 
 use Net::SSLeay;

@@ -1,5 +1,11 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.15    Apr 8th, 2011
+    remove $VERSION inside code
+
+0.14    Apr 8th, 2011
+    version up
+
 0.13    Jan 1st, 2011
     a real go
 
