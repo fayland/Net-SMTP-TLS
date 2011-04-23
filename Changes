@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.16    Apr 23th, 2011
+    from %S to %s in auth_PLAIN (RT 67608, thanks to khaled.blah)
+
 0.15    Apr 8th, 2011
     remove $VERSION inside code
 

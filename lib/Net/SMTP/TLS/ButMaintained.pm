@@ -238,11 +238,11 @@ sub auth_MD5{
 }
 
 # perform plain authentication
-sub auth_PLAIN{
+sub auth_PLAIN {
 	my $me	= shift;
 	my $user= $me->{User};
 	my $pass= $me->{Password};
-	$me->_command(sprintf("AUTH PLAIN %S",
+	$me->_command(sprintf("AUTH PLAIN %s",
 		encode_base64("$user\0$user\0$pass","")));
 	my ($num,$txt) = $me->_response();
 	if(not $num == 235){
