@@ -105,11 +105,16 @@ sub new {
 			or croak "Connect failed :$@\n";
 	
 	my $me	= bless \%args, $pkg;
+	
 	# read the line immediately after connecting
-	my ($rsp,$txt) = $me->_response();
-	if(not $rsp == 220){
-		croak "Could not connect to SMTP server: $host $txt\n";
-	}
+    my ( $rsp, $txt, $more ) = $me->_response();
+    if ( not $rsp == 220 ) {
+        croak "Could not connect to SMTP server: $host $txt\n";
+    }
+
+    # empty the socket of any continuation lines
+    while ( $more eq '-' ) { ( $rsp, $txt, $more ) = $me->_response(); }
+	
 	$me->hello(); # the first hello, 2nd after starttls
 	$me->starttls() if not $args{NoTLS}; # why we're here, after all
 	$me->login() if($me->{User} and $me->{Password});
