@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.18    Jun 20th, 2011
+    FIX NOTESTS
+
 0.17    May 25th, 2011
     clean continuation lines after connect (RT 68403, thanks to Chris Baker)
 
