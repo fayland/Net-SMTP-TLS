@@ -103,9 +103,9 @@ sub new {
 		Proto		=>	'tcp',
 		Timeout		=>	$args{Timeout} || 5)
 			or croak "Connect failed :$@\n";
-	
+
 	my $me	= bless \%args, $pkg;
-	
+
 	# read the line immediately after connecting
     my ( $rsp, $txt, $more ) = $me->_response();
     if ( not $rsp == 220 ) {
@@ -114,7 +114,7 @@ sub new {
 
     # empty the socket of any continuation lines
     while ( $more eq '-' ) { ( $rsp, $txt, $more ) = $me->_response(); }
-	
+
 	$me->hello(); # the first hello, 2nd after starttls
 	$me->starttls() if not $args{NoTLS}; # why we're here, after all
 	$me->login() if($me->{User} and $me->{Password});
@@ -175,7 +175,7 @@ sub starttls {
 		croak "Invalid response for STARTTLS: $num $txt\n";
 	}
 	if(not IO::Socket::SSL::socket_to_SSL($me->{sock},
-		SSL_version	=>	"SSLv3 TLSv1")){
+		SSL_version	=>	"TLSv1")){
 			croak "Couldn't start TLS: ".IO::Socket::SSL::errstr."\n";
 	}
 	$me->hello();
@@ -281,7 +281,7 @@ sub recipient {
 	my $me = shift;
 
 	my $addr;
-	foreach $addr (@_) 
+	foreach $addr (@_)
 	{
 		$me->_command("RCPT TO: "._addr($addr));
 		my ($num,$txt) = $me->_response();
