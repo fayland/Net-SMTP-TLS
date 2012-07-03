@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.20    Jul 3rd, 2012
+    fix hardcoding TLSv1 by Stuart Henderson
+
 0.19    Jun 17th, 2012
     fix Misuse of IO::Socket::SSL (RT 77865, by Christopher Orsolits)
 
