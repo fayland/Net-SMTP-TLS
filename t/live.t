@@ -10,12 +10,12 @@ BEGIN {
     unless ( $ENV{TEST_TLS} ) {
         plan skip_all => 'set $ENV{TEST_TLS} to test';
     }
-    open(my $fh, '<', "$Bin/config.txt") or do {
+    open( my $fh, '<', "$Bin/config.txt" ) or do {
         plan skip_all => "Can't find $Bin/config.txt";
     };
-    while (my $line = <$fh>) {
+    while ( my $line = <$fh> ) {
         chomp($line);
-        my ($k, $v) = split(/\s*\=\s*/, $line);
+        my ( $k, $v ) = split( /\s*\=\s*/, $line );
         $config{$k} = $v;
     }
     close($fh);
@@ -25,14 +25,14 @@ BEGIN {
 use Net::SMTP::TLS::ButMaintained;
 
 my $mailer = Net::SMTP::TLS::ButMaintained->new(
- 	$config{host},
- 	Port	 =>	$config{port},
- 	User	 =>	$config{user},
- 	Password =>	$config{pass},
- 	Debug    => 1,
+    $config{host},
+    Port     => $config{port},
+    User     => $config{user},
+    Password => $config{pass},
+    Debug    => 1,
 );
-$mailer->mail($config{user});
-$mailer->to($config{to});
+$mailer->mail( $config{user} );
+$mailer->to( $config{to} );
 $mailer->data;
 $mailer->datasend("Sent thru TLS!");
 $mailer->dataend;
