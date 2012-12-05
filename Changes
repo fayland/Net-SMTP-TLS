@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.21    Dec 5th, 2012
+    fix "invalid SSL_version specified at IO/Socket/SSL..." by Nick S. Knutov
+
 0.20    Jul 3rd, 2012
     fix hardcoding TLSv1 by Stuart Henderson
 
