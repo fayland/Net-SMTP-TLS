@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.22    May 11, 2013
+    Correct envelope sender & recipient format by Matt Simerson (GH #2)
+
 0.21    Dec 5th, 2012
     fix "invalid SSL_version specified at IO/Socket/SSL..." by Nick S. Knutov
 
