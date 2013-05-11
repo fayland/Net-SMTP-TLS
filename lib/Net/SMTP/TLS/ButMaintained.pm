@@ -264,7 +264,7 @@ sub _addr {
 	"<$addr>";
 }
 
-# send the MAIL FROM: <addr> command
+# send the MAIL FROM:<addr> command (RFC 5321, 821)
 sub mail {
 	my $me	= shift;
 	my $from= shift;
@@ -275,12 +275,12 @@ sub mail {
 	}
 }
 
-# send the RCPT TO: <addr> command
+# send the RCPT TO:<addr> command (RFC 5321, 821)
 sub recipient {
 	my $me = shift;
 
 	my $addr;
-	foreach $addr (@_)
+	foreach my $addr (@_)
 	{
 		$me->_command("RCPT TO:"._addr($addr));
 		my ($num,$txt) = $me->_response();
