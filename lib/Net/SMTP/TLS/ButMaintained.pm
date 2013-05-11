@@ -129,6 +129,7 @@ sub new {
 sub _command {
     my $me      = shift;
     my $command = shift;
+    print STDERR "<<< $command\n" if $me->{Debug};
     $me->{sock}->printf( $command . "\015\012" );
 }
 
@@ -137,6 +138,7 @@ sub _command {
 sub _response {
     my $me   = shift;
     my $line = $me->{sock}->getline();
+    print STDERR ">>> $line" if $me->{Debug};
     my @rsp  = ( $line =~ /(\d+)(.)([^\r]*)/ );
 
     # reverse things so the seperator is at the end...
