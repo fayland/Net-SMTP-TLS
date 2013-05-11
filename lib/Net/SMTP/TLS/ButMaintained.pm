@@ -91,19 +91,22 @@ BEGIN {    #set up Net::SSLeay's internals
 
 sub new {
     my $pkg  = shift;
-    my $host = shift;
+    my $hosts= shift;
     my %args = @_;
-    $args{Host} = $host;
     $args{Hello} = "localhost" if not $args{Hello};
 
-    # make the non-SSL socket that will later be
-    # transformed
-    $args{sock} = new IO::Socket::INET(
-        PeerAddr => $host,
-        PeerPort => $args{Port} || 25,
-        Proto    => 'tcp',
-        Timeout  => $args{Timeout} || 5
-    ) or croak "Connect failed :$@\n";
+    # make the non-SSL socket that will later be transformed
+    $hosts = [ $hosts ] if ! 'ARRAY' eq ref $hosts;
+    my $host;
+    foreach $host (@$hosts) {
+        $args{sock} = new IO::Socket::INET(
+            PeerAddr => $host,
+            PeerPort => $args{Port} || 25,
+            Proto    => 'tcp',
+            Timeout  => $args{Timeout} || 5
+        ) and last;
+    };
+    croak "Connect failed :$@\n" if ! $args{sock};
 
     my $me = bless \%args, $pkg;
 
