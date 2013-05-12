@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.24    May 12, 2013
+    typo fix
+
 0.23    May 12, 2013
     deprecated notice: please use Net::SMTPS instead.
 

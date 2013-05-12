@@ -1,6 +1,6 @@
 package Net::SMTP::TLS::ButMaintained;
 
-# ABSTRACT: An SMTP client supporting TLS and AUTH
+# ABSTRACT: An SMTP client supporting TLS and AUTH (DEPRECATED, use Net::SMTPS instead)
 
 =head1 SYNOPSIS
 
