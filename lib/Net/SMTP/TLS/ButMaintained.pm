@@ -20,7 +20,7 @@ package Net::SMTP::TLS::ButMaintained;
 
 =head1 DESCRIPTION
 
-B<DEPERCATED!>, Please use L<Net::SMTPS> instead.
+B<DEPRECATED!>, Please use L<Net::SMTPS> instead.
 
 B<Net::SMTP::TLS::ButMaintained> is forked from L<Net::SMTP::TLS>. blame C<Evan Carroll> for the idea. :)
 
