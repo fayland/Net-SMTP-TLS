@@ -1,5 +1,8 @@
 Revision history for Net-SMTP-TLS-ButMaintained
 
+0.23    May 12, 2013
+    depercated notice: please use Net::SMTPS instead.
+
 0.22    May 11, 2013
     Correct envelope sender & recipient format by Matt Simerson (GH #2)
 

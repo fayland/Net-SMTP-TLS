@@ -20,6 +20,8 @@ package Net::SMTP::TLS::ButMaintained;
 
 =head1 DESCRIPTION
 
+B<DEPERCATED!>, Please use L<Net::SMTPS> instead.
+
 B<Net::SMTP::TLS::ButMaintained> is forked from L<Net::SMTP::TLS>. blame C<Evan Carroll> for the idea. :)
 
 B<Net::SMTP::TLS::ButMaintained> is a TLS and AUTH capable SMTP client which offers an interface that users will find familiar from L<Net::SMTP>. B<Net::SMTP::TLS::ButMaintained> implements a subset of the methods provided by that module, but certainly not (yet) a complete mirror image of that API.
