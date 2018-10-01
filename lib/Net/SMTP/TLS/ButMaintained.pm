@@ -46,7 +46,7 @@ Hello - hostname used in the EHLO command
 
 Port - port to connect to the SMTP service (defaults to 25)
 
-Timeout - Timeout for inital socket connection (defaults to 5, passed directly to L<IO::Socket::INET>)
+Timeout - Timeout for initial socket connection (defaults to 5, passed directly to L<IO::Socket::INET>)
 
 User - username for SMTP AUTH
 
